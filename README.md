@@ -48,4 +48,5 @@ This repository includes four files: R_codes for S.PhyloMaker, PhytoPhylo, nodes
 4. example.splist    
     This is an example of species list on which S.PhyloMaker can run. It includes three columns, which are species, genus and family names. 
 
-
+Citation:    
+    Qian, H. and Y. Jin. 2015. An updated megaphylogeny of plants, a tool for generating plant phylogenies and an analysis of phylogenetic community structure. Journal of Plant Ecology DOI: 10.1093/jpe/rtv047
