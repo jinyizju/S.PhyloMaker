@@ -1,6 +1,7 @@
 S.PhyloMaker<-function (splist, tree, nodes, output.splist = T, scenarios = c("S1", 
     "S2", "S3")) 
 {
+    options(scipen=999)
     splist[sapply(splist, is.factor)] <- lapply(splist[sapply(splist, 
         is.factor)], as.character)
     nodes[sapply(nodes, is.factor)] <- lapply(nodes[sapply(nodes, 
