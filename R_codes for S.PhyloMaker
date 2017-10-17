@@ -14,6 +14,7 @@ S.PhyloMaker<-function (tree, spList, nodes, output.spList = T, scenarios = c("S
     spList$genus <- gsub("(^[[:alpha:]])", "\\U\\1", spList$genus, perl = TRUE)
     spList$family <- gsub("(^[[:alpha:]])", "\\U\\1", spList$family, perl = TRUE)
     rnN <- data.frame(node.label = paste("N", 1:length(tree$node.label), sep = ""), oriN = tree$node.label, stringsAsFactors = FALSE)
+    nodes[,c("level","family","genus","rn","bn","taxa")]<-lapply(nodes[,c("level","family","genus","rn","bn","taxa")], as.character)
     tree$node.label <- paste("N", 1:length(tree$node.label), sep = "")
     kk<-c()
     for (i in 1:length(tree$tip.label)) {
