@@ -27,12 +27,16 @@ This repository includes four files: R_codes for S.PhyloMaker, PhytoPhylo, nodes
   1.5 Value    
     The output of a run on the function contains a set of three phylogenies corresponding to the three scenarios (when default is chosen) and a species list, which includes the original columns of the "splist" data frame and an additional column (called "status") showing which species in the user’s species list have matched with species in the megaphylogeny. Species matched between the species list and the megaphylogeny are indicated as "match(prune)"; species that are added to the megaphylogeny before the pruning are indicated as "match(add)"; species whose genera or families are not found in the megaphylogeny are indicated as "unmatch". 
 
-  1.6 Example   
-    library("phytools")                       # load the "phytools" package.    
-    example<-read.csv("example.splist.csv",header=T)       # read in the example species list.    
-    phylo<-read.tree("PhytoPhylo.tre")      # read in the megaphylogeny.    
-    nodes<-read.csv("nodes.csv",header=T)     # read in the nodes information of the megaphylogeny.    
-    result<-S.PhyloMaker(splist=example, tree=phylo, nodes=nodes)      # run the function S.PhyloMaker.    
+  1.6 Example
+  
+  
+    #setwd()      #change working directory to the downloaded S.PhyloMaker folder    
+    library("phytools")                       # load the "phytools" package.  
+    source("R_codes for S.PhyloMaker")        # import the S.PhyloMaker() function
+    example<-read.csv("example.splist",header=T, sep = "\t")        # read in the example species list.    
+    phylo<-read.tree("PhytoPhylo")      # read in the megaphylogeny.    
+    nodes<-read.csv("nodes",header=T, sep = "\t")     # read in the nodes information of the megaphylogeny.    
+    result<-S.PhyloMaker(spList=example, tree=phylo, nodes=nodes)      # run the function S.PhyloMaker.    
     str(result)       # the structure of the ouput of S.PhyloMaker.    
     par(mfrow=c(1,3),mar=c(0,0,1,0))       # show the phylogenies of the three scenarios.    
     plot(result$Scenario.1,cex=1.1,main="Scenarion One")    
