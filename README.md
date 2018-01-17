@@ -27,9 +27,11 @@ This repository includes four files: R_codes for S.PhyloMaker, PhytoPhylo, nodes
   1.5 Value    
     The output of a run on the function contains a set of three phylogenies corresponding to the three scenarios (when default is chosen) and a species list, which includes the original columns of the "splist" data frame and an additional column (called "status") showing which species in the user’s species list have matched with species in the megaphylogeny. Species matched between the species list and the megaphylogeny are indicated as "match(prune)"; species that are added to the megaphylogeny before the pruning are indicated as "match(add)"; species whose genera or families are not found in the megaphylogeny are indicated as "unmatch". 
 
-  1.6 Example   
-    #setwd()      #change working directory to the downloaded S.PhyloMaker folder
-    library("phytools")                       # load the "phytools" package.   
+  1.6 Example
+  
+  
+    #setwd()      #change working directory to the downloaded S.PhyloMaker folder    
+    library("phytools")                       # load the "phytools" package.  
     source("R_codes for S.PhyloMaker")        # import the S.PhyloMaker() function
     example<-read.csv("example.splist",header=T, sep = "\t")        # read in the example species list.    
     phylo<-read.tree("PhytoPhylo")      # read in the megaphylogeny.    
