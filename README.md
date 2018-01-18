@@ -25,14 +25,14 @@ This repository includes four files: R_codes for S.PhyloMaker, PhytoPhylo, nodes
     Using the PhytoPhylo megaphylogeny as a backbone, this function takes a user-specified species list and matches species in the species list with species in the megaphylogeny. If a species is found in the megaphylogeny, the species will be selected for pruning; if the species is not found but its genus or family is found in the megaphylogeny, the species will be added to the backbone at a certain place within the genus or family depending on which scenarios are taken. Finally, the selected and added species are pruned from the megaphylogeny, which results in three phylogenies corresponding to the three scenarios (when default is chosen). 
 
   1.5 Value    
-    The output of a run on the function contains a set of three phylogenies corresponding to the three scenarios (when default is chosen) and a species list, which includes the original columns of the "splist" data frame and an additional column (called "status") showing which species in the user’s species list have matched with species in the megaphylogeny. Species matched between the species list and the megaphylogeny are indicated as "match(prune)"; species that are added to the megaphylogeny before the pruning are indicated as "match(add)"; species whose genera or families are not found in the megaphylogeny are indicated as "unmatch". 
+    The output of a run on the function contains a set of three phylogenies corresponding to the three scenarios (when default is chosen) and a species list, which includes the original columns of the "splist" data frame and an additional column (called "status") showing which species in the user’s species list have matched with species in the megaphylogeny. Species matched between the species list and the megaphylogeny are indicated as "match(prune)"; species that are added to the megaphylogeny before the pruning are indicated as "match(add)"; species whose families are not found in the megaphylogeny are indicated as "unmatch". 
 
   1.6 Example   
     library("phytools")                       # load the "phytools" package.    
     example<-read.csv("example.splist.csv",header=T)       # read in the example species list.    
     phylo<-read.tree("PhytoPhylo.tre")      # read in the megaphylogeny.    
     nodes<-read.csv("nodes.csv",header=T)     # read in the nodes information of the megaphylogeny.    
-    result<-S.PhyloMaker(splist=example, tree=phylo, nodes=nodes)      # run the function S.PhyloMaker.    
+    result<-S.PhyloMaker(spList=example, tree=phylo, nodes=nodes)      # run the function S.PhyloMaker.    
     str(result)       # the structure of the ouput of S.PhyloMaker.    
     par(mfrow=c(1,3),mar=c(0,0,1,0))       # show the phylogenies of the three scenarios.    
     plot(result$Scenario.1,cex=1.1,main="Scenarion One")    
