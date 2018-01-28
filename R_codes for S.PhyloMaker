@@ -95,15 +95,15 @@ S.PhyloMaker<-function (tree, spList, nodes, output.spList = T, scenarios = c("S
               if (length(n) == 1) {
                   num <- n
                   len <- t1$edge.length[match(num, t1$edge[, 2])]
-                  t1 <- bind.tip(t1, tip.label = data$species[i], where = num, position = len)
+                  t1 <- bind.tip(t1, tip.label = data$species[i], edge.length = len, where = num, position = len)
                   }
               if (length(n) > 1) {
                   num <- fastMRCA(t1, t1$tip.label[min(n)], t1$tip.label[max(n)])
-                  t1 <- bind.tip(t1, tip.label = data$species[i], where = num)
+                  len <- fastDist(t1, t1$tip.label[min(n)], t1$tip.label[max(n)])/2
+                  t1 <- bind.tip(t1, tip.label = data$species[i], edge.length = len, where = num)
                   }   
                }
             }
-        t1$edge.length <- round(t1$edge.length, 5)
         toDrop <- setdiff(1:length(t1$tip.label), which(!is.na(match(t1$tip.label, spList$species))))
         t1 <- drop.tip(t1, tip = toDrop)
         Re <- which(!is.na(match(t1$node.label, rnN1$node.label)))
@@ -128,7 +128,7 @@ S.PhyloMaker<-function (tree, spList, nodes, output.spList = T, scenarios = c("S
                 if (g == 1 & s == 1) {
                   num <- grep(nF$taxa[n], t2$tip.label)
                   len <- t2$edge.length[match(num, t2$edge[,2])] * sample((1:99)/100,1)
-                  t2 <- bind.tip(t2, tip.label = data$species[i], where = num, position = len)    
+                  t2 <- bind.tip(t2, tip.label = data$species[i], edge.length = len, where = num, position = len)    
                   nF$gen.n[n] <- g + 1
                   nF$sp.n[n] <- s + 1
                   num <- grep(data$species[i], t2$tip.label)
@@ -139,9 +139,8 @@ S.PhyloMaker<-function (tree, spList, nodes, output.spList = T, scenarios = c("S
                 }
                 else {
                   num <- unique(t2$edge[, 1])[match(nF$bn[n], t2$node.label)]
-                  len <- t2$edge.length[match(num,t2$edge[,2])]
-                  len <- len * sample((1:99)/100,1)
-                  t2 <- bind.tip(t2, tip.label = data$species[i], where = num, position = len)
+                  len <- t2$edge.length[match(num,t2$edge[,2])] * sample((1:99)/100,1)
+                  t2 <- bind.tip(t2, tip.label = data$species[i], edge.length = len, where = num, position = len)
                   nF$gen.n[n] <- g + 1
                   nF$sp.n[n] <- s + 1
                   num <- grep(data$species[i], t2$tip.label)
@@ -159,16 +158,15 @@ S.PhyloMaker<-function (tree, spList, nodes, output.spList = T, scenarios = c("S
               if (length(n) == 1) {
                   num <- n
                   len <- t2$edge.length[match(num, t2$edge[, 2])] * sample((1:99)/100,1)
-                  t2 <- bind.tip(t2, tip.label = data$species[i], where = num, position = len)
+                  t2 <- bind.tip(t2, tip.label = data$species[i], edge.length = len, where = num, position = len)
                   }
               if (length(n) > 1) {
                   num <- sample(n,1)
                   len <- t2$edge.length[match(num, t2$edge[, 2])] * sample((1:99)/100,1)
-                  t2 <- bind.tip(t2, tip.label = data$species[i], where = num, position = len)
+                  t2 <- bind.tip(t2, tip.label = data$species[i], edge.length = len, where = num, position = len)
                   }   
                }
          }
-        t2$edge.length <- round(t2$edge.length, 5)
         toDrop <- setdiff(1:length(t2$tip.label), which(!is.na(match(t2$tip.label, spList$species))))
         t2 <- drop.tip(t2, tip = toDrop)
         Re <- which(!is.na(match(t2$node.label, rnN2$node.label)))
@@ -244,7 +242,6 @@ S.PhyloMaker<-function (tree, spList, nodes, output.spList = T, scenarios = c("S
                 }
             }
         }
-        t3$edge.length <- round(t3$edge.length, 5)
         toDrop <- setdiff(1:length(t3$tip.label), which(!is.na(match(t3$tip.label, spList$species))))
         t3 <- drop.tip(t3, tip = toDrop)
         Re <- which(!is.na(match(t3$node.label, rnN3$node.label)))
@@ -261,3 +258,4 @@ S.PhyloMaker<-function (tree, spList, nodes, output.spList = T, scenarios = c("S
     phylo[sapply(phylo, is.null)] <- NULL
     return(phylo)
 }
+
