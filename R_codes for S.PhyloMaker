@@ -37,9 +37,6 @@ S.PhyloMaker<-function (tree, spList, nodes, output.spList = T, scenarios = c("S
         print("Taxonomic classification not consistent between spList and PhytoPhylo.")
         print(g) 
       }
-    fam <- union(m$family_in_PhytoPhylo, m0$family_in_spList)
-    mm<-tree$tip.label[setdiff(1:length(tree$tip.label),mX$num[which(mX$family %in% fam)])]
-    tree<-drop.tip(tree,mm)
     add.tip <- spList[which(is.na(match(spList$species, tree$tip.label))), ]
     status <- rep("match(prune)", dim(spList)[1])
     status[which(is.na(match(spList$species, tree$tip.label)))] <- "match(add)"
