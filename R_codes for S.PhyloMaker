@@ -1,6 +1,7 @@
 S.PhyloMaker<-function (tree, spList, nodes, output.spList = T, scenarios = c("S1", "S2", "S3")) 
 {
     options(scipen=999)
+    tree0 <- tree
     spList[sapply(spList, is.factor)] <- lapply(spList[sapply(spList, is.factor)], as.character)
     if (any(duplicated(spList$species))) 
       {
@@ -22,30 +23,42 @@ S.PhyloMaker<-function (tree, spList, nodes, output.spList = T, scenarios = c("S
     }
     m<-data.frame(num=1:length(kk),genus=kk,species=tree$tip.label)
     m<-merge(m,nodes[,c("genus","family")])
-    m<-m[order(m$num),]
-    mm<-merge(data.frame(family=unique(spList$family)),m)
-    mm1<-spList
-    mm1$mark<-paste(mm1$genus,mm1$family,sep="_")
-    g0<-intersect(mm1$genus,m$genus)
-    g1<-intersect(mm1$genus,mm$genus)
-    g<-setdiff(g0,g1) 
-    if (length(g)>0)
+    mX <- m
+    m <- m[,c("genus","family")]
+    m <- m[!duplicated(m$genus),]
+    dimnames(m)[[2]][2] <- "family_in_PhytoPhylo"
+    m<-m[,c("genus","family_in_PhytoPhylo")]
+    m0 <- spList[!duplicated(spList$genus), c("genus","family")]
+    dimnames(m0)[[2]][2] <- "family_in_spList"
+    mm<-merge(m0, m)
+    g<-mm[which(is.na(match(paste(mm$genus,mm$family_in_spList,sep="_"),paste(mm$genus,mm$family_in_PhytoPhylo,sep="_")))),]
+    if (dim(g)[1]>0)
       {
-        gg0<-m[,c("genus","family")][match(g,m$genus),];dimnames(gg0)[[2]][2]<-"family_in_PhytoPhylo"
-        gg1<-mm1[,c("genus","family")][match(g,mm1$genus),];dimnames(gg1)[[2]][2]<-"family_in_spList" 
-        gg<-merge(gg0,gg1)
-        warning("Taxnomic classification not consistent between species list and PhytoPhylo.")
-        print(gg)  
+        print("Taxonomic classification not consistent between spList and PhytoPhylo.")
+        print(g) 
       }
-    mm<-tree$tip.label[setdiff(1:length(tree$tip.label),mm$num)]
+    fam <- union(m$family_in_PhytoPhylo, m0$family_in_spList)
+    mm<-tree$tip.label[setdiff(1:length(tree$tip.label),mX$num[which(mX$family %in% fam)])]
     tree<-drop.tip(tree,mm)
     add.tip <- spList[which(is.na(match(spList$species, tree$tip.label))), ]
     status <- rep("match(prune)", dim(spList)[1])
     status[which(is.na(match(spList$species, tree$tip.label)))] <- "match(add)"
     if (dim(add.tip)[1] == 0 & length(na.omit(match(spList$species, tree$tip.label))) == 0)
         stop("Incorrect format of species list.")
-    if (dim(add.tip)[1] == 0 & length(na.omit(match(spList$species, tree$tip.label))) > 0)
-        stop("There is no species needs to be added, just prune the species from PhytoPhylo.")
+    if (length(setdiff(spList$species, tree0$tip.label)) == 0 & length(na.omit(match(spList$species, tree$tip.label))) > 0)
+     {
+        print("There is no species needs to be added, all the species are pruned from PhytoPhylo.")
+        splis <- spList.original
+        treeX <- drop.tip(tree0, setdiff(tree0$tip.label, splis$species))
+        splis$status <- "match(prune)"
+        phylo0 <- list(Scenario.1 = NULL, Scenario.2 = NULL, Scenario.3 = NULL, Species.list = splis)
+        if ("S1" %in% scenarios) {phylo0$Scenario.1 <- treeX}
+        if ("S2" %in% scenarios) {phylo0$Scenario.2 <- treeX}
+        if ("S3" %in% scenarios) {phylo0$Scenario.3 <- treeX}
+        phylo0[sapply(phylo0, is.null)] <- NULL
+        return(phylo0)
+        stop()
+     }
     add.tip$sort <- ""
     add.tip$sort[which(!is.na(match(add.tip$genus, nodes[nodes$level == "G", ]$genus)))] <- "G1"
     add.tip$sort[which(is.na(match(add.tip$genus, nodes[nodes$level == "G", ]$genus)) & !is.na(match(add.tip$family, nodes[nodes$level == "F", ]$family)))] <- "F1"
@@ -258,4 +271,3 @@ S.PhyloMaker<-function (tree, spList, nodes, output.spList = T, scenarios = c("S
     phylo[sapply(phylo, is.null)] <- NULL
     return(phylo)
 }
-
