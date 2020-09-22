@@ -214,7 +214,7 @@ S.PhyloMaker<-function (tree, spList, nodes, output.spList = T, scenarios = c("S
                   num <- unique(t3$edge[, 1])[match(nF$bn[n], t3$node.label)]
                   if ((2/3)*nF$rn.bl[n] <= nF$bn.bl[n])  { len <-(nF$rn.bl[n]-nF$bn.bl[n])/2 }
                   if ((2/3)*nF$rn.bl[n] > nF$bn.bl[n])   { len <-nF$rn.bl[n]*2/3-nF$bn.bl[n] }
-                  t3 <- bind.tip(t3, tip.label = data$species[i], where = num, position = len)
+                  t3 <- bind.tip(t3, tip.label = data$species[i], edge.length = len, where = num, position = len)
                   nF$gen.n[n] <- g + 1
                   nF$sp.n[n] <- s + 1
                   num <- unique(t3$edge[, 1])[match(nF$bn[n], t3$node.label)]
