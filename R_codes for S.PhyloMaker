@@ -1,5 +1,6 @@
 S.PhyloMaker<-function (tree, spList, nodes, output.spList = T, scenarios = c("S1", "S2", "S3")) 
 {
+    pb <- txtProgressBar(min=0, max=100, initial=0)
     options(scipen=999)
     tree0 <- tree
     spList[sapply(spList, is.factor)] <- lapply(spList[sapply(spList, is.factor)], as.character)
@@ -100,7 +101,9 @@ S.PhyloMaker<-function (tree, spList, nodes, output.spList = T, scenarios = c("S
         }
         data <- add.tip[add.tip$sort != "F1", ]
        if (dim(data)[1] > 0) {
-            for (i in 1:dim(data)[1]) {
+            maxi <- dim(data)[1]
+            for (i in 1:maxi) {
+              setTxtProgressBar(pb, i / maxi * 100)
                 n <- grep(paste(data$genus[i], "_", sep = ""), t1$tip.label)
               if (length(n) == 1) {
                   num <- n
@@ -163,7 +166,9 @@ S.PhyloMaker<-function (tree, spList, nodes, output.spList = T, scenarios = c("S
         }
        data <- add.tip[add.tip$sort != "F1", ]
        if (dim(data)[1] > 0) {
-            for (i in 1:dim(data)[1]) {
+            maxi <- dim(data)[1]
+            for (i in 1:maxi) {
+                setTxtProgressBar(pb, i / maxi * 100)
                 n <- grep(paste(data$genus[i], "_", sep = ""), t2$tip.label)
               if (length(n) == 1) {
                   num <- n
@@ -232,7 +237,9 @@ S.PhyloMaker<-function (tree, spList, nodes, output.spList = T, scenarios = c("S
         }
         data <- add.tip[add.tip$sort != "F1", ]
         if (dim(data)[1] > 0) {
-            for (i in 1:dim(data)[1]) {
+            maxi <- dim(data)[1]
+            for (i in 1:maxi) {
+                setTxtProgressBar(pb, i / maxi * 100)
                 n <- grep(paste(data$genus[i], "_", sep = ""), t3$tip.label)
                 if (length(n) == 1) {
                   len <- t3$edge.length[match(n, t3$edge[, 2])]/2
@@ -266,5 +273,6 @@ S.PhyloMaker<-function (tree, spList, nodes, output.spList = T, scenarios = c("S
         spList <- NULL
     phylo <- list(Scenario.1 = t1, Scenario.2 = t2, Scenario.3 = t3, Species.list = spList.original)
     phylo[sapply(phylo, is.null)] <- NULL
+    close(pb)
     return(phylo)
 }
